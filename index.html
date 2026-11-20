@@ -243,18 +243,20 @@
   .c4-qr{transform:rotate(4deg);background:#fff;padding:10px 10px 8px;box-shadow:0 8px 20px rgba(30,11,51,.2)}
   .c4-qr img{width:110px;height:110px;padding:0}
 
-  /* 05 · pop */
-  .c5-dots{position:absolute;inset:0;background-image:radial-gradient(#E78AC8 3px,transparent 3.4px);background-size:20px 20px;-webkit-mask-image:linear-gradient(135deg,#000 0%,transparent 35%);mask-image:linear-gradient(135deg,#000 0%,transparent 35%);opacity:.7}
-  .c5-mast{left:40px;right:40px;top:76px;font-family:Anton,Impact,sans-serif;color:#7B2CBF;text-shadow:7px 7px 0 #E78AC8;letter-spacing:6px}
-  .c5-bubble{position:absolute;right:34px;top:330px;width:220px;padding:22px 18px;background:#fff;border:4px solid #1E0B33;border-radius:50%;text-align:center;font-family:Anton,Impact,sans-serif;font-size:48px;line-height:.95;text-transform:uppercase;color:#1E0B33;box-shadow:6px 6px 0 #1E0B33;z-index:3}
-  .c5-bubble::after{content:"";position:absolute;left:24px;bottom:-26px;border:18px solid transparent;border-top:30px solid #1E0B33;transform:rotate(20deg)}
-  .c5-words{position:absolute;left:30px;top:360px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;z-index:3}
-  .c5-words span{font-family:Anton,Impact,sans-serif;font-size:50px;line-height:1;text-transform:uppercase;background:#D4FF3F;color:#1E0B33;padding:4px 10px;transform:rotate(-3deg);box-shadow:4px 4px 0 #1E0B33}
-  .c5-words span:nth-child(2){background:#E78AC8;transform:rotate(2deg)}
-  .c5-words span:nth-child(3){background:#fff}
-  .c5-burst{position:absolute;left:24px;top:760px;width:190px;height:190px;background:#7B2CBF;clip-path:polygon(50% 0,61% 18%,80% 8%,79% 30%,100% 32%,87% 50%,100% 68%,79% 70%,80% 92%,61% 82%,50% 100%,39% 82%,20% 92%,21% 70%,0 68%,13% 50%,0 32%,21% 30%,20% 8%,39% 18%);display:grid;place-items:center;transform:rotate(-10deg);z-index:3}
-  .c5-burst span{font-family:Anton,Impact,sans-serif;font-size:32px;line-height:.95;text-transform:uppercase;text-align:center;color:#fff}
-
+  /* 05 · editorial circle with turning text ring */
+  .c5{background:radial-gradient(circle at 50% 47%,#4B1F7E 0%,#2A0F4A 45%,#170829 100%);color:#F6F2FB}
+  .c5-glow{position:absolute;left:150px;top:350px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(231,138,200,.45),transparent 70%);filter:blur(30px)}
+  .c5-strip{color:#F6F2FB}
+  .c5-mast{left:40px;right:40px;top:76px;color:#F6F2FB;letter-spacing:-5px}
+  .c5-ring{position:absolute;left:50px;top:250px;width:800px;height:800px;fill:#D4FF3F;font-family:Inter,sans-serif;font-weight:800;font-size:28px;animation:c5-spin 40s linear infinite;transform-origin:50% 50%}
+  @keyframes c5-spin{to{transform:rotate(360deg)}}
+  .c5-circle{position:absolute;left:150px;top:350px;width:600px;height:600px;border-radius:50%;overflow:hidden;border:6px solid #F6F2FB;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+  .c5-circle img{position:absolute;left:-230px;top:-150px;width:1060px;height:1590px;object-fit:cover}
+  .c5-no{position:absolute;left:40px;top:860px;font-family:"DM Serif Display",Georgia,serif;font-size:220px;line-height:1;color:transparent;-webkit-text-stroke:3px #E78AC8;z-index:2}
+  .c5-joy{position:absolute;right:44px;top:840px;text-align:right;font-family:Anton,Impact,sans-serif;font-size:82px;line-height:.9;text-transform:uppercase;color:#F6F2FB;z-index:2}
+  .c5-joy i{font-family:"DM Serif Display",Georgia,serif;font-size:56px;text-transform:lowercase;color:#E78AC8}
+  .c5-foot{padding-top:90px}
+  @media (prefers-reduced-motion:reduce){.c5-ring{animation:none}}
   /* 06 · neon night */
   .c6{background:#12061F}
   .c6-photo{filter:brightness(.8) contrast(1.2) saturate(.9)}
@@ -452,14 +454,17 @@
       <button class="poster" type="button" data-label="No. 05 · The Joy Issue" aria-label="View poster: No. 05 · The Joy Issue">
         <div class="poster-frame"><div class="poster-inner mag" aria-hidden="true">
 <div class="c5">
-  <img class="m-photo" loading="lazy" src="photos/smile.jpg" alt="">
-  <div class="c5-dots"></div>
-  <div class="m-strip "><span>No. 05</span><span>Afro &amp; Hip Hop</span><span>The Joy Issue</span></div>
+  <div class="c5-glow"></div>
+  <div class="m-strip c5-strip"><span>No. 05</span><span>Afro &amp; Hip Hop</span><span>The Joy Issue</span></div>
   <div class="m-mast c5-mast"><span>HODAYA</span></div>
-  <div class="c5-bubble">Let's<br>dance!</div>
-  <div class="c5-words"><span>Move.</span><span>Smile.</span><span>Repeat.</span></div>
-  <div class="c5-burst"><span>New<br>classes</span></div>
-  <div class="m-foot dark"><div class="m-foot-text"><div class="m-with">with Hodaya Avital</div><div class="m-tag">Feel the beat. Own the floor.</div><div class="m-url">hodayaavital.com · @avital.hodaya</div></div><div class="m-qr"><img src="qr.png" alt=""><span>Scan to book</span></div></div>
+  <svg class="c5-ring" viewBox="0 0 800 800" aria-hidden="true">
+    <defs><path id="c5-circle" d="M400,400 m-352,0 a352,352 0 1,1 704,0 a352,352 0 1,1 -704,0"/></defs>
+    <text><textPath href="#c5-circle" textLength="2190" lengthAdjust="spacing">FEEL THE BEAT ✦ OWN THE FLOOR ✦ AFRO &amp; HIP HOP ✦ ALL LEVELS WELCOME ✦</textPath></text>
+  </svg>
+  <div class="c5-circle"><img loading="lazy" src="photos/smile.jpg" alt=""></div>
+  <div class="c5-no">05</div>
+  <div class="c5-joy"><i>the</i><br>joy<br><i>issue</i></div>
+  <div class="m-foot dark c5-foot"><div class="m-foot-text"><div class="m-with">with Hodaya Avital</div><div class="m-tag">Feel the beat. Own the floor.</div><div class="m-url">hodayaavital.com · @avital.hodaya</div></div><div class="m-qr"><img src="qr.png" alt=""><span>Scan to book</span></div></div>
 </div>
         </div></div>
         <span class="poster-label">No. 05 · The Joy Issue</span>
