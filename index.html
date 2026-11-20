@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Afro &amp; Hip Hop dance classes and private sessions with Hodaya Avital. Book your session on WhatsApp.">
 <title>Hodaya Avital · Afro &amp; Hip Hop Dance Classes</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;600;800&family=Permanent+Marker&display=swap">
 <style>
   :root{--ink:#1E0B33;--ground:#E9E3F2;--paper:#F6F2FB;--accent:#7B2CBF;--muted:#4B3D5E}
   *{box-sizing:border-box}
@@ -98,24 +98,104 @@
   .poster-frame{position:relative;width:100%;aspect-ratio:2/3;overflow:hidden;border-radius:10px;box-shadow:0 10px 30px rgba(30,11,51,.15);background:var(--ground)}
   .poster-inner{position:absolute;left:0;top:0;width:900px;height:1350px;transform-origin:0 0;pointer-events:none}
   .mag{background:#E6E6E8;color:#1E0B33;font-family:Inter,sans-serif;overflow:hidden}
-  .mag-photo{position:absolute;inset:0;width:900px;height:1350px;object-fit:cover}
-  .mag-strip{position:absolute;left:40px;right:40px;top:30px;display:flex;justify-content:space-between;border-top:3px solid currentColor;border-bottom:1px solid currentColor;padding:8px 0;font-size:17px;font-weight:800;letter-spacing:4px;text-transform:uppercase}
-  .mag-mast{position:absolute;left:40px;right:40px;top:66px;font-family:"DM Serif Display",Georgia,serif;font-size:240px;line-height:.9;letter-spacing:-4px;text-align:center;white-space:nowrap}
-  .mag-lines{position:absolute;display:flex;flex-direction:column;gap:4px}
-  .mag-big{display:block;white-space:nowrap;font-family:Anton,Impact,sans-serif;font-size:66px;line-height:.95;text-transform:uppercase;letter-spacing:1px}
-  .mag-sub{font-family:"DM Serif Display",Georgia,serif;font-style:italic;font-size:30px;line-height:1.1;margin-top:10px}
-  .mag-small{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-top:6px}
-  .mag-foot{position:absolute;left:0;right:0;bottom:0;padding:120px 40px 40px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
-  .mag-light .mag-foot{background:linear-gradient(to top,rgba(240,238,242,.95) 45%,rgba(240,238,242,0))}
-  .mag-dark .mag-foot{background:linear-gradient(to top,rgba(18,6,31,.92) 45%,rgba(18,6,31,0));color:#fff}
-  .mag-foot-text{display:flex;flex-direction:column;gap:6px;min-width:0}
-  .mag-head{font-family:Anton,Impact,sans-serif;font-size:84px;line-height:.95;text-transform:uppercase;color:#CDA8F5;margin-bottom:8px}
-  .mag-with{font-family:"DM Serif Display",Georgia,serif;font-style:italic;font-size:54px;line-height:1}
-  .mag-tag{font-size:17px;font-weight:800;letter-spacing:4px;text-transform:uppercase}
-  .mag-url{font-size:16px;font-weight:600;opacity:.85}
-  .mag-qr{display:flex;flex-direction:column;align-items:center;gap:8px;flex:none}
-  .mag-qr img{width:130px;height:130px;display:block;border-radius:6px;background:#fff;padding:6px}
-  .mag-qr span{font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase}
+  .mag > div{position:absolute;inset:0;overflow:hidden}
+  .m-photo{position:absolute;inset:0;width:900px;height:1350px;object-fit:cover}
+  .m-strip{position:absolute;left:40px;right:40px;top:30px;display:flex;justify-content:space-between;border-top:3px solid currentColor;border-bottom:1px solid currentColor;padding:8px 0;font-size:16px;font-weight:800;letter-spacing:4px;text-transform:uppercase;z-index:3}
+  .m-mast{position:absolute;white-space:nowrap;line-height:.85;text-align:center;font-family:"DM Serif Display",Georgia,serif;font-size:240px}
+  .m-kicker{position:absolute;font-family:"DM Serif Display",Georgia,serif;font-style:italic}
+  .m-foot{position:absolute;left:0;right:0;bottom:0;padding:130px 40px 40px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;z-index:4}
+  .m-foot.light{background:linear-gradient(to top,rgba(240,238,242,.96) 45%,rgba(240,238,242,0))}
+  .m-foot.dark{background:linear-gradient(to top,rgba(18,6,31,.94) 45%,rgba(18,6,31,0));color:#fff}
+  .m-foot-text{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .m-with{font-family:"DM Serif Display",Georgia,serif;font-style:italic;font-size:54px;line-height:1}
+  .m-tag{font-size:16px;font-weight:800;letter-spacing:4px;text-transform:uppercase}
+  .m-url{font-size:16px;font-weight:600;opacity:.85}
+  .m-qr{display:flex;flex-direction:column;align-items:center;gap:8px;flex:none}
+  .m-qr img{width:130px;height:130px;display:block;border-radius:6px;background:#fff;padding:6px}
+  .m-qr span{font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;text-align:center}
+
+  /* 01 · masthead "behind" the hair: multiply keeps dark hair dark */
+  .c1-kick{left:40px;right:40px;top:82px;text-align:center;font-size:30px;color:#5E1F96}
+  .c1-mast{left:30px;right:30px;top:62px;color:#7B2CBF;mix-blend-mode:multiply;letter-spacing:-6px}
+  .c1-sticker{position:absolute;right:48px;top:300px;width:170px;height:170px;border-radius:50%;background:#D4FF3F;display:grid;place-items:center;transform:rotate(12deg);box-shadow:0 8px 20px rgba(30,11,51,.25);z-index:3}
+  .c1-sticker span{font-family:Anton,Impact,sans-serif;font-size:30px;line-height:.95;text-transform:uppercase;text-align:center;color:#1E0B33}
+  .c1-sticker b{font-weight:400;color:#7B2CBF}
+  .c1-list{position:absolute;left:40px;top:850px;width:330px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;z-index:3}
+  .c1-list li{display:flex;gap:12px;align-items:baseline;border-top:2px solid #1E0B33;padding-top:8px}
+  .c1-list b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:#7B2CBF}
+  .c1-list span{font-family:"DM Serif Display",Georgia,serif;font-size:27px;line-height:1.1}
+
+  /* 02 · duotone */
+  .c2{background:#2A0F4A}
+  .c2-photo{filter:grayscale(1) contrast(1.2) brightness(1.05)}
+  .c2-tone{position:absolute;inset:0;background:linear-gradient(160deg,#C9A6F5 0%,#E78AC8 55%,#7B2CBF 100%);mix-blend-mode:multiply}
+  .c2-vert{position:absolute;left:-20px;top:1350px;transform:rotate(-90deg);transform-origin:0 0;font-family:Anton,Impact,sans-serif;font-size:330px;line-height:1;color:transparent;-webkit-text-stroke:3px rgba(255,255,255,.9);letter-spacing:8px;white-space:nowrap}
+  .c2-mast{left:300px;right:36px;top:46px;color:#fff;text-shadow:0 4px 30px rgba(42,15,74,.35)}
+  .c2-issue{position:absolute;right:40px;top:250px;text-align:right;color:#fff;font-family:Anton,Impact,sans-serif;font-size:44px;line-height:1;text-transform:uppercase}
+  .c2-issue i{font-family:"DM Serif Display",Georgia,serif;font-size:28px;text-transform:none}
+  .c2-lines{position:absolute;right:40px;top:420px;width:200px;display:flex;flex-direction:column;gap:12px;color:#fff;text-align:right}
+  .c2-lines i{font-family:"DM Serif Display",Georgia,serif;font-size:96px;line-height:.8;color:#1E0B33}
+  .c2-lines span{font-family:"DM Serif Display",Georgia,serif;font-size:28px;line-height:1.15}
+  .c2-lines b{font-size:14px;letter-spacing:3px;text-transform:uppercase}
+
+  /* 03 · color block */
+  .c3{background:#1E0B33}
+  .c3-panel{position:absolute;left:0;top:0;bottom:0;width:350px;padding:44px 36px 260px;display:flex;flex-direction:column;gap:18px;color:#fff;z-index:2}
+  .c3-no{font-family:Anton,Impact,sans-serif;font-size:170px;line-height:.85;color:transparent;-webkit-text-stroke:3px #CDA8F5}
+  .c3-issue{font-size:15px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:#CDA8F5;border-top:2px solid #CDA8F5;padding-top:10px}
+  .c3-big{font-family:Anton,Impact,sans-serif;font-size:84px;line-height:.92;text-transform:uppercase}
+  .c3-big em{font-family:"DM Serif Display",Georgia,serif;font-style:italic;text-transform:lowercase;color:#E78AC8;font-size:90px}
+  .c3-sub{font-family:"DM Serif Display",Georgia,serif;font-style:italic;font-size:28px;line-height:1.2;color:#E9E3F2}
+  .c3-qr{display:flex;gap:14px;align-items:center;margin-top:auto}
+  .c3-qr img{width:110px;height:110px;background:#fff;padding:6px;border-radius:6px}
+  .c3-qr span{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;line-height:1.6}
+  .c3-photo-wrap{position:absolute;left:350px;top:0;right:0;bottom:0;overflow:hidden}
+  .c3-photo{width:100%;height:100%;object-fit:cover;object-position:46% 0}
+  .c3-with{position:absolute;left:370px;top:40px;font-size:14px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#1E0B33}
+  .c3-mast{left:16px;right:16px;bottom:22px;color:#CDA8F5;z-index:3;letter-spacing:-4px}
+
+  /* 04 · zine / polaroid */
+  .c4{background:#E9E3F2}
+  .c4-dots{position:absolute;inset:0;background-image:radial-gradient(#7B2CBF 2.2px,transparent 2.6px);background-size:22px 22px;opacity:.16}
+  .c4-mast{left:36px;right:36px;top:40px;color:#1E0B33;letter-spacing:-5px}
+  .c4-label{position:absolute;left:250px;top:236px;transform:rotate(-2deg);background:#E78AC8;color:#1E0B33;font-size:17px;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:8px 16px;z-index:3}
+  .c4-polaroid{position:absolute;left:170px;top:300px;width:600px;padding:22px 22px 100px;background:#fff;transform:rotate(-4deg);box-shadow:0 18px 40px rgba(30,11,51,.28);z-index:2}
+  .c4-polaroid img{display:block;width:556px;height:640px;object-fit:cover;object-position:50% 22%}
+  .c4-caption{position:absolute;left:0;right:0;bottom:26px;text-align:center;font-family:"Permanent Marker","Comic Sans MS",cursive;font-size:44px;color:#7B2CBF}
+  .c4-tape{position:absolute;width:150px;height:40px;background:rgba(212,255,63,.75);top:-16px}
+  .c4-tape.t1{left:-30px;transform:rotate(-30deg)}
+  .c4-tape.t2{right:-30px;transform:rotate(28deg)}
+  .c4-note{position:absolute;left:38px;top:1000px;transform:rotate(-6deg);font-family:Anton,Impact,sans-serif;font-size:58px;line-height:.95;text-transform:uppercase;color:#7B2CBF;z-index:3}
+  .c4-circle{position:absolute;right:40px;top:1060px;width:240px;height:110px;display:grid;place-items:center;z-index:3}
+  .c4-circle svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:#E78AC8;stroke-width:5}
+  .c4-circle span{font-family:"Permanent Marker","Comic Sans MS",cursive;font-size:38px;color:#1E0B33}
+  .c4-foot{position:absolute;left:40px;right:40px;bottom:36px;display:flex;align-items:flex-end;justify-content:space-between;z-index:3}
+  .c4-foot .m-with{font-size:46px}
+  .c4-qr{transform:rotate(4deg);background:#fff;padding:10px 10px 8px;box-shadow:0 8px 20px rgba(30,11,51,.2)}
+  .c4-qr img{width:110px;height:110px;padding:0}
+
+  /* 05 · pop */
+  .c5-dots{position:absolute;inset:0;background-image:radial-gradient(#E78AC8 3px,transparent 3.4px);background-size:20px 20px;-webkit-mask-image:linear-gradient(135deg,#000 0%,transparent 35%);mask-image:linear-gradient(135deg,#000 0%,transparent 35%);opacity:.7}
+  .c5-mast{left:40px;right:40px;top:76px;font-family:Anton,Impact,sans-serif;color:#7B2CBF;text-shadow:7px 7px 0 #E78AC8;letter-spacing:6px}
+  .c5-bubble{position:absolute;right:34px;top:330px;width:220px;padding:22px 18px;background:#fff;border:4px solid #1E0B33;border-radius:50%;text-align:center;font-family:Anton,Impact,sans-serif;font-size:48px;line-height:.95;text-transform:uppercase;color:#1E0B33;box-shadow:6px 6px 0 #1E0B33;z-index:3}
+  .c5-bubble::after{content:"";position:absolute;left:24px;bottom:-26px;border:18px solid transparent;border-top:30px solid #1E0B33;transform:rotate(20deg)}
+  .c5-words{position:absolute;left:30px;top:360px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;z-index:3}
+  .c5-words span{font-family:Anton,Impact,sans-serif;font-size:50px;line-height:1;text-transform:uppercase;background:#D4FF3F;color:#1E0B33;padding:4px 10px;transform:rotate(-3deg);box-shadow:4px 4px 0 #1E0B33}
+  .c5-words span:nth-child(2){background:#E78AC8;transform:rotate(2deg)}
+  .c5-words span:nth-child(3){background:#fff}
+  .c5-burst{position:absolute;left:24px;top:760px;width:190px;height:190px;background:#7B2CBF;clip-path:polygon(50% 0,61% 18%,80% 8%,79% 30%,100% 32%,87% 50%,100% 68%,79% 70%,80% 92%,61% 82%,50% 100%,39% 82%,20% 92%,21% 70%,0 68%,13% 50%,0 32%,21% 30%,20% 8%,39% 18%);display:grid;place-items:center;transform:rotate(-10deg);z-index:3}
+  .c5-burst span{font-family:Anton,Impact,sans-serif;font-size:32px;line-height:.95;text-transform:uppercase;text-align:center;color:#fff}
+
+  /* 06 · neon night */
+  .c6{background:#12061F}
+  .c6-photo{filter:brightness(.8) contrast(1.2) saturate(.9)}
+  .c6-tone{position:absolute;inset:0;background:linear-gradient(#6A2BB0,#2A0F4A 70%,#12061F);mix-blend-mode:multiply}
+  .c6::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 38%,rgba(231,138,200,.28),transparent 55%);mix-blend-mode:screen;pointer-events:none}
+  .m-strip.neon{color:#F4D9FF;text-shadow:0 0 10px #C77DFF}
+  .c6-mast{left:40px;right:40px;top:80px;font-family:Anton,Impact,sans-serif;color:transparent;-webkit-text-stroke:4px #F4D9FF;letter-spacing:10px;filter:drop-shadow(0 0 10px #C77DFF) drop-shadow(0 0 28px #9D4EDD)}
+  .c6-sign{position:absolute;right:44px;top:330px;padding:14px 18px;border:3px solid #FF8AD8;border-radius:14px;color:#FFE3F6;font-family:"Permanent Marker","Comic Sans MS",cursive;font-size:34px;line-height:1.05;text-align:center;transform:rotate(-6deg);box-shadow:0 0 14px #FF4FA3,inset 0 0 14px #FF4FA3;text-shadow:0 0 8px #FF4FA3;z-index:3}
+  .c6-head{position:absolute;left:40px;bottom:300px;font-family:Anton,Impact,sans-serif;font-size:118px;line-height:.9;text-transform:uppercase;color:#fff;text-shadow:0 0 18px rgba(199,125,255,.9);z-index:5}
+  .c6-head span{color:#FF8AD8;text-shadow:0 0 22px #FF4FA3}
   .poster-label{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
   .events{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .event{background:#fff;border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px}
@@ -227,104 +307,100 @@
     </div>
     <div class="posters">
       <button class="poster" type="button" data-label="No. 01 · The Groove Issue" aria-label="View poster: No. 01 · The Groove Issue">
-        <div class="poster-frame"><div class="poster-inner mag mag-light" aria-hidden="true">
-          <img class="mag-photo" loading="lazy" src="photos/low-stance.jpg" alt="">
-          <div class="mag-strip"><span>No. 01</span><span>Afro &amp; Hip Hop</span><span>The Groove Issue</span></div>
-          <div class="mag-mast" style="color:#7B2CBF"><span>HODAYA</span></div>
-          <div class="mag-lines" style="right:40px;top:262px;width:300px;text-align:right;align-items:flex-end"><span class="mag-big">AFRO</span><span class="mag-big" style="color:#7B2CBF">&amp; HIP HOP</span><span class="mag-sub">Classes for every level</span><span class="mag-small">Group</span><span class="mag-small">Private</span><span class="mag-small">Events</span></div>
-          <div class="mag-foot">
-            <div class="mag-foot-text">
-              <div class="mag-with">with Hodaya Avital</div>
-              <div class="mag-tag">Feel the beat. Own the floor.</div>
-              <div class="mag-url">hodayaavital.com · @avital.hodaya</div>
-            </div>
-            <div class="mag-qr"><img src="qr.png" alt=""><span>Scan to book</span></div>
-          </div>
+        <div class="poster-frame"><div class="poster-inner mag" aria-hidden="true">
+<div class="c1">
+  <img class="m-photo" loading="lazy" src="photos/low-stance.jpg" alt="">
+  <div class="m-strip "><span>No. 01</span><span>Afro &amp; Hip Hop</span><span>The Groove Issue</span></div>
+  <div class="m-mast c1-mast"><span>HODAYA</span></div>
+  <div class="c1-sticker"><span>All<br>levels<br><b>welcome</b></span></div>
+  <ol class="c1-list">
+    <li><b>01</b><span>Afro grooves &amp; footwork</span></li>
+    <li><b>02</b><span>Hip hop bounce &amp; choreo</span></li>
+    <li><b>03</b><span>Private sessions</span></li>
+  </ol>
+  <div class="m-foot light"><div class="m-foot-text"><div class="m-with">with Hodaya Avital</div><div class="m-tag">Feel the beat. Own the floor.</div><div class="m-url">hodayaavital.com · @avital.hodaya</div></div><div class="m-qr"><img src="qr.png" alt=""><span>Scan to book</span></div></div>
+</div>
         </div></div>
         <span class="poster-label">No. 01 · The Groove Issue</span>
       </button>
       <button class="poster" type="button" data-label="No. 02 · The Street Issue" aria-label="View poster: No. 02 · The Street Issue">
-        <div class="poster-frame"><div class="poster-inner mag mag-light" aria-hidden="true">
-          <img class="mag-photo" loading="lazy" src="photos/standing-bw.jpg" alt="">
-          <div class="mag-strip"><span>No. 02</span><span>Afro &amp; Hip Hop</span><span>The Street Issue</span></div>
-          <div class="mag-mast" style="color:#1E0B33"><span>HODAYA</span></div>
-          <div class="mag-lines" style="left:40px;top:300px;width:230px"><span class="mag-big">STREET</span><span class="mag-big" style="color:#7B2CBF">STYLE</span><span class="mag-sub">Hip hop foundations, bounce &amp; choreo</span><span class="mag-small">All levels welcome</span></div>
-          <div class="mag-foot">
-            <div class="mag-foot-text">
-              <div class="mag-with">with Hodaya Avital</div>
-              <div class="mag-tag">Feel the beat. Own the floor.</div>
-              <div class="mag-url">hodayaavital.com · @avital.hodaya</div>
-            </div>
-            <div class="mag-qr"><img src="qr.png" alt=""><span>Scan to book</span></div>
-          </div>
+        <div class="poster-frame"><div class="poster-inner mag" aria-hidden="true">
+<div class="c2">
+  <img class="m-photo c2-photo" loading="lazy" src="photos/standing-bw.jpg" alt="">
+  <div class="c2-tone"></div>
+  <div class="c2-vert">STREET</div>
+  <div class="m-mast c2-mast"><span>HODAYA</span></div>
+  <div class="c2-issue">No.02<br><i>The Street Issue</i></div>
+  <div class="c2-lines"><i>style</i><span>Hip hop foundations, bounce &amp; choreo</span><b>Afro · Hip Hop · Private</b></div>
+  <div class="m-foot dark"><div class="m-foot-text"><div class="m-with">with Hodaya Avital</div><div class="m-tag">Feel the beat. Own the floor.</div><div class="m-url">hodayaavital.com · @avital.hodaya</div></div><div class="m-qr"><img src="qr.png" alt=""><span>Scan to book</span></div></div>
+</div>
         </div></div>
         <span class="poster-label">No. 02 · The Street Issue</span>
       </button>
       <button class="poster" type="button" data-label="No. 03 · The Rhythm Issue" aria-label="View poster: No. 03 · The Rhythm Issue">
-        <div class="poster-frame"><div class="poster-inner mag mag-dark" aria-hidden="true">
-          <img class="mag-photo" loading="lazy" src="photos/kneeling-bw.jpg" alt="">
-          <div class="mag-strip"><span>No. 03</span><span>Afro &amp; Hip Hop</span><span>The Rhythm Issue</span></div>
-          <div class="mag-mast" style="color:#1E0B33"><span>HODAYA</span></div>
-          <div class="mag-lines" style="right:36px;top:320px;width:226px"><span class="mag-big">FIND</span><span class="mag-big" style="color:#7B2CBF">YOUR</span><span class="mag-big">RHYTHM</span><span class="mag-sub">Afro grooves &amp; footwork</span><span class="mag-small">Beginners welcome</span></div>
-          <div class="mag-foot">
-            <div class="mag-foot-text">
-              <div class="mag-with">with Hodaya Avital</div>
-              <div class="mag-tag">Feel the beat. Own the floor.</div>
-              <div class="mag-url">hodayaavital.com · @avital.hodaya</div>
-            </div>
-            <div class="mag-qr"><img src="qr.png" alt=""><span>Scan to book</span></div>
-          </div>
+        <div class="poster-frame"><div class="poster-inner mag" aria-hidden="true">
+<div class="c3">
+  <div class="c3-panel">
+    <div class="c3-no">03</div>
+    <div class="c3-issue">The Rhythm Issue</div>
+    <div class="c3-big">Find<br><em>your</em><br>rhythm</div>
+    <div class="c3-sub">Afro grooves, footwork &amp; the beat that moves you.</div>
+    <div class="c3-qr"><img src="qr.png" alt=""><span>Scan to book<br>hodayaavital.com</span></div>
+  </div>
+  <div class="c3-photo-wrap"><img class="c3-photo" loading="lazy" src="photos/kneeling-bw.jpg" alt=""></div>
+  <div class="c3-with">with Hodaya Avital · @avital.hodaya</div>
+  <div class="m-mast c3-mast"><span>HODAYA</span></div>
+</div>
         </div></div>
         <span class="poster-label">No. 03 · The Rhythm Issue</span>
       </button>
       <button class="poster" type="button" data-label="No. 04 · The Confidence Issue" aria-label="View poster: No. 04 · The Confidence Issue">
-        <div class="poster-frame"><div class="poster-inner mag mag-dark" aria-hidden="true">
-          <img class="mag-photo" loading="lazy" src="photos/lean.jpg" alt="">
-          <div class="mag-strip"><span>No. 04</span><span>Afro &amp; Hip Hop</span><span>The Confidence Issue</span></div>
-          <div class="mag-mast" style="color:#7B2CBF"><span>HODAYA</span></div>
-          <div class="mag-lines" style="left:40px;top:300px;width:190px"><span class="mag-big">OWN</span><span class="mag-big" style="color:#7B2CBF">THE</span><span class="mag-big">FLOOR</span><span class="mag-sub">Move with confidence</span><span class="mag-small">Group &amp; private</span></div>
-          <div class="mag-foot">
-            <div class="mag-foot-text">
-              <div class="mag-with">with Hodaya Avital</div>
-              <div class="mag-tag">Feel the beat. Own the floor.</div>
-              <div class="mag-url">hodayaavital.com · @avital.hodaya</div>
-            </div>
-            <div class="mag-qr"><img src="qr.png" alt=""><span>Scan to book</span></div>
-          </div>
+        <div class="poster-frame"><div class="poster-inner mag" aria-hidden="true">
+<div class="c4">
+  <div class="c4-dots"></div>
+  <div class="m-mast c4-mast"><span>HODAYA</span></div>
+  <div class="c4-label">No.04 — The Confidence Issue</div>
+  <div class="c4-polaroid">
+    <img loading="lazy" src="photos/lean.jpg" alt="">
+    <div class="c4-caption">own the floor!</div>
+    <i class="c4-tape t1"></i><i class="c4-tape t2"></i>
+  </div>
+  <div class="c4-note">Afro &amp;<br>Hip Hop<br>classes</div>
+  <div class="c4-circle"><svg viewBox="0 0 240 110" aria-hidden="true"><ellipse cx="120" cy="55" rx="112" ry="46" transform="rotate(-4 120 55)"/></svg><span>all levels</span></div>
+  <div class="c4-foot">
+    <div class="m-foot-text"><div class="m-with">with Hodaya Avital</div><div class="m-url">hodayaavital.com · @avital.hodaya</div></div>
+    <div class="m-qr c4-qr"><img src="qr.png" alt=""><span>Scan to book</span></div>
+  </div>
+</div>
         </div></div>
         <span class="poster-label">No. 04 · The Confidence Issue</span>
       </button>
       <button class="poster" type="button" data-label="No. 05 · The Joy Issue" aria-label="View poster: No. 05 · The Joy Issue">
-        <div class="poster-frame"><div class="poster-inner mag mag-dark" aria-hidden="true">
-          <img class="mag-photo" loading="lazy" src="photos/smile.jpg" alt="">
-          <div class="mag-strip"><span>No. 05</span><span>Afro &amp; Hip Hop</span><span>The Joy Issue</span></div>
-          <div class="mag-mast" style="color:#7B2CBF"><span>HODAYA</span></div>
-          <div class="mag-lines" style="left:34px;top:330px;width:170px"><span class="mag-big">MOVE.</span><span class="mag-big" style="color:#7B2CBF">SMILE.</span><span class="mag-big">REPEAT.</span><span class="mag-sub">Feel-good classes</span></div>
-          <div class="mag-foot">
-            <div class="mag-foot-text">
-              <div class="mag-with">with Hodaya Avital</div>
-              <div class="mag-tag">Feel the beat. Own the floor.</div>
-              <div class="mag-url">hodayaavital.com · @avital.hodaya</div>
-            </div>
-            <div class="mag-qr"><img src="qr.png" alt=""><span>Scan to book</span></div>
-          </div>
+        <div class="poster-frame"><div class="poster-inner mag" aria-hidden="true">
+<div class="c5">
+  <img class="m-photo" loading="lazy" src="photos/smile.jpg" alt="">
+  <div class="c5-dots"></div>
+  <div class="m-strip "><span>No. 05</span><span>Afro &amp; Hip Hop</span><span>The Joy Issue</span></div>
+  <div class="m-mast c5-mast"><span>HODAYA</span></div>
+  <div class="c5-bubble">Let's<br>dance!</div>
+  <div class="c5-words"><span>Move.</span><span>Smile.</span><span>Repeat.</span></div>
+  <div class="c5-burst"><span>New<br>classes</span></div>
+  <div class="m-foot dark"><div class="m-foot-text"><div class="m-with">with Hodaya Avital</div><div class="m-tag">Feel the beat. Own the floor.</div><div class="m-url">hodayaavital.com · @avital.hodaya</div></div><div class="m-qr"><img src="qr.png" alt=""><span>Scan to book</span></div></div>
+</div>
         </div></div>
         <span class="poster-label">No. 05 · The Joy Issue</span>
       </button>
       <button class="poster" type="button" data-label="No. 06 · The Energy Issue" aria-label="View poster: No. 06 · The Energy Issue">
-        <div class="poster-frame"><div class="poster-inner mag mag-dark" aria-hidden="true">
-          <img class="mag-photo" loading="lazy" src="photos/kneeling.jpg" alt="">
-          <div class="mag-strip"><span>No. 06</span><span>Afro &amp; Hip Hop</span><span>The Energy Issue</span></div>
-          <div class="mag-mast" style="color:#7B2CBF"><span>HODAYA</span></div>
-          
-          <div class="mag-foot">
-            <div class="mag-foot-text"><div class="mag-head">BRING THE ENERGY</div>
-              <div class="mag-with">with Hodaya Avital</div>
-              <div class="mag-tag">Feel the beat. Own the floor.</div>
-              <div class="mag-url">hodayaavital.com · @avital.hodaya</div>
-            </div>
-            <div class="mag-qr"><img src="qr.png" alt=""><span>Scan to book</span></div>
-          </div>
+        <div class="poster-frame"><div class="poster-inner mag" aria-hidden="true">
+<div class="c6">
+  <img class="m-photo c6-photo" loading="lazy" src="photos/kneeling.jpg" alt="">
+  <div class="c6-tone"></div>
+  <div class="m-strip neon"><span>No. 06</span><span>Afro &amp; Hip Hop</span><span>The Energy Issue</span></div>
+  <div class="m-mast c6-mast"><span>HODAYA</span></div>
+  <div class="c6-sign">Open for<br>bookings</div>
+  <div class="c6-head">Bring the<br><span>energy</span></div>
+  <div class="m-foot dark"><div class="m-foot-text"><div class="m-with">with Hodaya Avital</div><div class="m-tag">Feel the beat. Own the floor.</div><div class="m-url">hodayaavital.com · @avital.hodaya</div></div><div class="m-qr"><img src="qr.png" alt=""><span>Scan to book</span></div></div>
+</div>
         </div></div>
         <span class="poster-label">No. 06 · The Energy Issue</span>
       </button>
@@ -611,13 +687,7 @@
     const inner = frame.querySelector('.poster-inner');
     if (inner && frame.clientWidth) inner.style.transform = 'scale(' + (frame.clientWidth / 900) + ')';
   }
-  // Shrink cover lines that are wider than their column
-  function fitBig(el){
-    el.style.fontSize = '';
-    const base = parseFloat(getComputedStyle(el).fontSize);
-    if (el.scrollWidth > el.clientWidth && el.clientWidth) el.style.fontSize = Math.floor(base * el.clientWidth / el.scrollWidth) + 'px';
-  }
-  const fitAllMasts = () => { document.querySelectorAll('.mag-mast').forEach(fitMast); document.querySelectorAll('.mag-big').forEach(fitBig); };
+  const fitAllMasts = () => { document.querySelectorAll('.m-mast').forEach(fitMast); };
   fitAllMasts();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAllMasts);
   const ro = ('ResizeObserver' in window) ? new ResizeObserver(es => es.forEach(e => fitPoster(e.target))) : null;
