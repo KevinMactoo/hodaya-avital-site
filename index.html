@@ -9,6 +9,7 @@
 <style>
   :root{--ink:#1E0B33;--ground:#E9E3F2;--paper:#F6F2FB;--accent:#7B2CBF;--muted:#4B3D5E}
   *{box-sizing:border-box}
+  [hidden]{display:none !important}
   body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5}
   a{color:var(--accent)}
   .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
@@ -386,28 +387,8 @@
       <p class="kicker" style="color:var(--accent)">Events</p>
       <h2 class="display" style="font-size:56px">Coming up</h2>
     </div>
-    <div class="events">
-      <article class="event">
-        <span class="date">[DATE]</span>
-        <h3 class="display">[EVENT NAME]</h3>
-        <p>[Short description: workshop, showcase, open class]</p>
-        <p class="meta" style="font-weight:800;color:var(--ink)">[TIME] · [LOCATION]</p>
-        <a class="btn accent" href="#book">Book a spot</a>
-      </article>
-      <article class="event">
-        <span class="date">[DATE]</span>
-        <h3 class="display">[EVENT NAME]</h3>
-        <p>[Short description: workshop, showcase, open class]</p>
-        <p class="meta" style="font-weight:800;color:var(--ink)">[TIME] · [LOCATION]</p>
-        <a class="btn accent" href="#book">Book a spot</a>
-      </article>
-      <article class="event">
-        <span class="date">[DATE]</span>
-        <h3 class="display">[EVENT NAME]</h3>
-        <p>[Short description: workshop, showcase, open class]</p>
-        <p class="meta" style="font-weight:800;color:var(--ink)">[TIME] · [LOCATION]</p>
-        <a class="btn accent" href="#book">Book a spot</a>
-      </article>
+    <div class="events" id="events-list" aria-live="polite"></div>
+    <p class="note" id="events-empty" hidden>No events announced right now. Follow <a href="https://www.instagram.com/avital.hodaya/?hl=en" target="_blank" rel="noopener">@avital.hodaya</a> for the next one, or book a class below.</p>
     </div>
   </div>
 </section>
@@ -430,7 +411,8 @@
           <label for="phone">Phone</label>
           <input id="phone" name="phone" type="tel" autocomplete="tel" required>
         </div>
-        <fieldset>
+        <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <fieldset id="cls-field">
           <legend>Class</legend>
           <div class="chips">
             <label class="chip"><input type="radio" name="cls" value="Afro" checked><span>Afro</span></label>
@@ -443,13 +425,18 @@
           <div class="chips">
             <label class="chip"><input type="radio" name="type" value="Group class" checked><span>Group class</span></label>
             <label class="chip"><input type="radio" name="type" value="Private session"><span>Private session</span></label>
+            <label class="chip" id="event-chip" hidden><input type="radio" name="type" value="Event"><span>Event</span></label>
           </div>
         </fieldset>
-        <div class="field">
+        <div class="field full" id="event-field" hidden>
+          <label for="eventId">Event</label>
+          <select id="eventId" name="eventId"></select>
+        </div>
+        <div class="field" id="date-field">
           <label for="date">Preferred date</label>
           <input id="date" name="date" type="date" required>
         </div>
-        <div class="field">
+        <div class="field" id="time-field">
           <label for="time">Preferred time</label>
           <select id="time" name="time">
             <option>Morning</option>
@@ -474,12 +461,12 @@
           <textarea id="msg" name="msg"></textarea>
         </div>
         <p class="error" id="err" role="alert" hidden></p>
-        <div class="field full"><button class="btn accent" type="submit">Prepare booking request</button></div>
+        <div class="field full"><button class="btn accent" type="submit" id="submit-btn">Send booking request</button></div>
       </form>
 
       <div class="done" id="done" aria-live="polite">
-        <h3 class="display" style="font-size:40px">Almost there</h3>
-        <p class="note">Your request isn't sent yet. Tap the WhatsApp button, then press send in the chat.</p>
+        <h3 class="display" style="font-size:40px" id="done-title">Almost there</h3>
+        <p class="note" id="done-note">Your request isn't sent yet. Tap the WhatsApp button, then press send in the chat.</p>
         <pre id="summary"></pre>
         <div class="row">
           <a class="btn accent" id="wa" href="https://wa.me/972585653466" target="_blank" rel="noopener">Send on WhatsApp</a>
@@ -515,39 +502,112 @@
   const copied = document.getElementById('copied');
   try { document.getElementById('date').min = new Date().toISOString().slice(0,10); } catch(e) {}
 
-  form.addEventListener('submit', (e) => {
+  const typeRadios = form.querySelectorAll('input[name="type"]');
+  const eventSel = document.getElementById('eventId');
+  let upcoming = [];
+  function fmtDay(date, opts) {
+    try { return new Date(date + 'T12:00').toLocaleDateString('en-GB', opts || {weekday:'long',day:'numeric',month:'long'}); } catch(e) { return date; }
+  }
+  function syncType() {
+    const isEvent = form.querySelector('input[name="type"]:checked').value === 'Event';
+    document.getElementById('event-field').hidden = !isEvent;
+    document.getElementById('cls-field').hidden = isEvent;
+    document.getElementById('date-field').hidden = isEvent;
+    document.getElementById('time-field').hidden = isEvent;
+  }
+  typeRadios.forEach(r => r.addEventListener('change', syncType));
+
+  async function postBooking(payload) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 8000);
+    try {
+      const r = await fetch('/api/book', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl.signal });
+      const j = await r.json().catch(() => ({}));
+      return { ok: r.ok, error: j.error, status: r.status };
+    } catch (e) { return { ok: false }; }
+    finally { clearTimeout(t); }
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = new FormData(form);
     const name = (f.get('name')||'').trim();
     const phone = (f.get('phone')||'').trim();
+    const type = f.get('type');
+    const isEvent = type === 'Event';
     const date = f.get('date');
-    if (!name || !phone || !date) {
-      err.textContent = 'Please add your name, phone and a preferred date.';
+    const ev = isEvent ? upcoming.find(x => x.id === f.get('eventId')) : null;
+    if (!name || !phone || (!isEvent && !date) || (isEvent && !ev)) {
+      err.textContent = isEvent ? 'Please add your name, phone and choose an event.' : 'Please add your name, phone and a preferred date.';
       err.hidden = false;
       return;
     }
     err.hidden = true;
-    let d = date;
-    try { d = new Date(date + 'T12:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}); } catch(e) {}
+    const msg = (f.get('msg')||'').trim();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    const saved = await postBooking({
+      name, phone, type, cls: f.get('cls'), eventId: ev ? ev.id : '', date: isEvent ? '' : date,
+      time: f.get('time'), level: f.get('level'), people: f.get('people') || 1, note: msg, website: f.get('website') || ''
+    });
+    btn.disabled = false; btn.textContent = 'Send booking request';
+    if (saved.status === 400 && saved.error) { err.textContent = saved.error; err.hidden = false; return; }
+
     const lines = [
       'Hi Hodaya! I\'d like to book a session.',
       '',
       'Name: ' + name,
       'Phone: ' + phone,
-      'Class: ' + f.get('cls') + ' (' + f.get('type') + ')',
-      'Preferred: ' + d + ', ' + f.get('time'),
+      isEvent ? 'Event: ' + ev.title + ' (' + fmtDay(ev.date) + (ev.time ? ', ' + ev.time : '') + ')' : 'Class: ' + f.get('cls') + ' (' + type + ')',
+      isEvent ? null : 'Preferred: ' + fmtDay(date) + ', ' + f.get('time'),
       'Level: ' + f.get('level'),
       'People: ' + (f.get('people') || 1)
-    ];
-    const msg = (f.get('msg')||'').trim();
+    ].filter(l => l !== null);
     if (msg) lines.push('Note: ' + msg);
     summary.textContent = lines.join('\n');
     document.getElementById('wa').href = 'https://wa.me/972585653466?text=' + encodeURIComponent(summary.textContent);
+    document.getElementById('done-title').textContent = saved.ok ? 'Request received' : 'Almost there';
+    document.getElementById('done-note').textContent = saved.ok
+      ? 'Your booking request is in. Hodaya will confirm your spot. For a faster reply, send it on WhatsApp too.'
+      : 'Your request isn\'t sent yet. Tap the WhatsApp button, then press send in the chat.';
     copied.textContent = '';
     form.style.display = 'none';
     done.classList.add('show');
     done.scrollIntoView({behavior:'smooth', block:'start'});
   });
+
+  // Upcoming events from the CRM
+  function renderEvents(list) {
+    const box = document.getElementById('events-list');
+    box.replaceChildren();
+    list.forEach(ev => {
+      const card = document.createElement('article'); card.className = 'event';
+      const date = document.createElement('span'); date.className = 'date'; date.textContent = fmtDay(ev.date, {weekday:'short',day:'numeric',month:'short'});
+      const h = document.createElement('h3'); h.className = 'display'; h.textContent = ev.title;
+      card.append(date, h);
+      if (ev.description) { const p = document.createElement('p'); p.textContent = ev.description; card.append(p); }
+      const meta = document.createElement('p'); meta.className = 'meta'; meta.style.cssText = 'font-weight:800;color:var(--ink)';
+      meta.textContent = [ev.time, ev.location, ev.price].filter(Boolean).join(' · ');
+      if (meta.textContent) card.append(meta);
+      if (ev.spotsLeft !== null && ev.spotsLeft !== undefined) {
+        const s = document.createElement('p'); s.textContent = ev.spotsLeft > 0 ? ev.spotsLeft + ' spots left' : 'Fully booked'; card.append(s);
+      }
+      const a = document.createElement('a'); a.className = 'btn accent'; a.href = '#book';
+      a.textContent = ev.spotsLeft === 0 ? 'Join waitlist' : 'Book a spot';
+      a.addEventListener('click', () => {
+        form.style.display = ''; done.classList.remove('show');
+        form.querySelector('input[name="type"][value="Event"]').checked = true;
+        eventSel.value = ev.id; syncType();
+      });
+      card.append(a);
+      box.append(card);
+    });
+    document.getElementById('events-empty').hidden = list.length > 0;
+    document.getElementById('event-chip').hidden = list.length === 0;
+    eventSel.replaceChildren(...list.map(ev => { const o = document.createElement('option'); o.value = ev.id; o.textContent = ev.title + ' · ' + fmtDay(ev.date, {weekday:'short',day:'numeric',month:'short'}); return o; }));
+  }
+  fetch('/api/events').then(r => r.ok ? r.json() : { events: [] }).catch(() => ({ events: [] }))
+    .then(j => { upcoming = Array.isArray(j.events) ? j.events : []; renderEvents(upcoming); });
 
   document.getElementById('copy').addEventListener('click', async () => {
     try {

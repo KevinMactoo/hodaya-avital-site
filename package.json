@@ -1,0 +1,6 @@
+{
+  "name": "hodaya-avital-site",
+  "private": true,
+  "description": "hodayaavital.com: booking site and CRM",
+  "engines": { "node": ">=18" }
+}
