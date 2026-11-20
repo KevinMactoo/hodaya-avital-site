@@ -93,6 +93,31 @@
   .reel-embed iframe{border:0;width:100%;max-width:400px;height:min(80vh,720px);border-radius:8px;background:#fff}
   .reel-embed a{font-weight:800;font-size:14px;padding:6px 0}
   .announce{background:var(--accent);color:#fff;text-align:center;font-weight:800;font-size:15px;padding:12px 20px}
+  /* Booking art: photo-booth strip + ticket */
+  .book-art{position:relative;width:100%;aspect-ratio:5/6;container-type:inline-size;margin-top:8px}
+  .ba-strip{position:absolute;left:3%;top:1%;width:44%;height:96%;background:#12061F;padding:3.2cqw 3.2cqw 9cqw;display:flex;flex-direction:column;gap:2.4cqw;transform:rotate(-4deg);box-shadow:0 2.5cqw 6cqw rgba(30,11,51,.3);z-index:1}
+  .ba-frame{position:relative;flex:1;overflow:hidden;background:#333}
+  .ba-frame img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;filter:grayscale(1) contrast(1.15);display:block}
+  .ba-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,#C9A6F5,#E78AC8);mix-blend-mode:multiply;opacity:.55}
+  .ba-strip-name{position:absolute;left:0;right:0;bottom:2cqw;text-align:center;font-family:"Permanent Marker","Comic Sans MS",cursive;font-size:5cqw;color:#F4D9FF}
+  .ba-ticket{position:absolute;right:0;top:30%;width:60%;display:flex;transform:rotate(5deg);filter:drop-shadow(0 2cqw 3cqw rgba(30,11,51,.3));z-index:2}
+  .ba-main{flex:1;background:#7B2CBF;color:#fff;padding:4cqw 4.5cqw;display:flex;flex-direction:column;gap:1.4cqw;border-radius:2cqw 0 0 2cqw;
+    -webkit-mask:radial-gradient(circle at 100% 50%,transparent 2.6cqw,#000 2.7cqw);mask:radial-gradient(circle at 100% 50%,transparent 2.6cqw,#000 2.7cqw)}
+  .ba-admit{font-size:2.6cqw;font-weight:800;letter-spacing:.8cqw;text-transform:uppercase;color:#D4FF3F}
+  .ba-title{font-family:Anton,Impact,sans-serif;font-size:9.5cqw;line-height:.92;text-transform:uppercase}
+  .ba-title em{font-family:"DM Serif Display",Georgia,serif;color:#F4B6E0}
+  .ba-with{font-family:"DM Serif Display",Georgia,serif;font-style:italic;font-size:4.4cqw;line-height:1.1}
+  .ba-meta{font-size:2.3cqw;font-weight:800;letter-spacing:.5cqw;text-transform:uppercase;opacity:.85;border-top:.4cqw dashed rgba(255,255,255,.5);padding-top:1.6cqw;margin-top:.6cqw}
+  .ba-stub{width:17cqw;background:#D4FF3F;color:#1E0B33;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5cqw;border-left:.5cqw dashed #1E0B33;border-radius:0 2cqw 2cqw 0;
+    -webkit-mask:radial-gradient(circle at 0 50%,transparent 2.6cqw,#000 2.7cqw);mask:radial-gradient(circle at 0 50%,transparent 2.6cqw,#000 2.7cqw)}
+  .ba-stub span,.ba-stub b{writing-mode:vertical-rl;transform:rotate(180deg);text-transform:uppercase;white-space:nowrap}
+  .ba-stub span{font-size:2.4cqw;font-weight:800;letter-spacing:.5cqw}
+  .ba-stub b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:6cqw}
+  .ba-sticker{position:absolute;right:6%;top:4%;width:23cqw;height:23cqw;border-radius:50%;background:#E78AC8;color:#1E0B33;display:grid;place-items:center;text-align:center;font-family:Anton,Impact,sans-serif;font-size:4.6cqw;line-height:.95;text-transform:uppercase;transform:rotate(-12deg);box-shadow:0 1.5cqw 3cqw rgba(30,11,51,.2);z-index:3}
+  .ba-note{position:absolute;right:3%;bottom:6%;font-family:"Permanent Marker","Comic Sans MS",cursive;font-size:6.5cqw;color:#7B2CBF;transform:rotate(-6deg);z-index:3}
+  .ba-down{display:none}
+  .split .book-art img{border-radius:0;max-height:none}
+  @media (max-width:820px){ .ba-right{display:none} .ba-down{display:inline} }
   .posters{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .poster{padding:0;border:0;background:none;cursor:zoom-in;text-align:left;display:flex;flex-direction:column;gap:10px;font:inherit;color:inherit}
   .poster-frame{position:relative;width:100%;aspect-ratio:2/3;overflow:hidden;border-radius:10px;box-shadow:0 10px 30px rgba(30,11,51,.15);background:var(--ground)}
@@ -426,7 +451,25 @@
       <p class="kicker" style="color:var(--accent)">Booking</p>
       <h2 class="display" style="font-size:56px">Book your session</h2>
       <p class="note">Fill in the form and send your request to Hodaya on WhatsApp. She'll confirm your spot.</p>
-      <img src="photos/low-stance.jpg" alt="Hodaya in a low hip hop stance">
+      <div class="book-art" role="img" aria-label="Photo-booth strip of Hodaya dancing, with a ticket that says Admit one: Afro and Hip Hop with Hodaya Avital">
+        <div class="ba-strip" aria-hidden="true">
+          <div class="ba-frame"><img loading="lazy" src="photos/low-stance.jpg" alt=""></div>
+          <div class="ba-frame"><img loading="lazy" src="photos/standing-bw.jpg" alt=""></div>
+          <div class="ba-frame"><img loading="lazy" src="photos/kneeling-bw.jpg" alt=""></div>
+          <div class="ba-strip-name">Hodaya</div>
+        </div>
+        <div class="ba-ticket" aria-hidden="true">
+          <div class="ba-main">
+            <span class="ba-admit">Admit one</span>
+            <span class="ba-title">Afro <em>&amp;</em><br>Hip Hop</span>
+            <span class="ba-with">with Hodaya Avital</span>
+            <span class="ba-meta">Group · Private · Events</span>
+          </div>
+          <div class="ba-stub"><span>Your spot</span><b>No. 001</b></div>
+        </div>
+        <div class="ba-sticker" aria-hidden="true">One step<br>left!</div>
+        <div class="ba-note" aria-hidden="true"><span class="ba-right">fill it in &rarr;</span><span class="ba-down">fill it in &darr;</span></div>
+      </div>
     </div>
     <div>
       <form id="form" novalidate>
