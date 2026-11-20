@@ -80,6 +80,18 @@
   .gallery img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .3s}
   .gallery button:hover img{transform:scale(1.03)}
   .gallery button:focus-visible,.poster:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  .reels-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .reels-head a{font-weight:800;font-size:14px}
+  .reels{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .reel{position:relative;padding:0;border:0;border-radius:14px;overflow:hidden;aspect-ratio:9/16;background:var(--ink);cursor:pointer;display:block}
+  .reel img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+  .reel:hover img{transform:scale(1.03)}
+  .reel:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  .reel .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:999px;background:rgba(255,255,255,.9);display:grid;place-items:center;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+  .reel .play svg{width:22px;height:22px;margin-left:3px;fill:var(--ink)}
+  .reel-embed{display:flex;flex-direction:column;gap:10px;align-items:center;background:#fff;border-radius:12px;padding:10px}
+  .reel-embed iframe{border:0;width:100%;max-width:400px;height:min(80vh,720px);border-radius:8px;background:#fff}
+  .reel-embed a{font-weight:800;font-size:14px;padding:6px 0}
   .posters{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .poster{padding:0;border:0;background:none;cursor:zoom-in;text-align:left;display:flex;flex-direction:column;gap:10px;font:inherit;color:inherit}
   .poster-frame{position:relative;width:100%;aspect-ratio:2/3;overflow:hidden;border-radius:10px;box-shadow:0 10px 30px rgba(30,11,51,.15);background:var(--ground)}
@@ -99,6 +111,7 @@
   .viewer-close{position:absolute;top:10px;right:10px;z-index:2;width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.92);color:var(--ink);font:800 22px Inter,sans-serif;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
   @media (max-width:820px){
     .gallery{grid-template-columns:repeat(2,1fr)}
+    .reels{grid-template-columns:repeat(2,1fr)}
     .posters,.events{grid-template-columns:1fr 1fr}
     nav.links{display:none}
   }
@@ -164,6 +177,14 @@
     <div class="section-head">
       <p class="kicker" style="color:var(--accent)">Gallery</p>
       <h2 class="display" style="font-size:56px">In motion</h2>
+    </div>
+    <div id="reels-block" hidden>
+      <div class="reels-head">
+        <h3 class="kicker">Latest reels</h3>
+        <a href="https://www.instagram.com/avital.hodaya/?hl=en" target="_blank" rel="noopener">Follow @avital.hodaya</a>
+      </div>
+      <div class="reels" id="reels"></div>
+      <h3 class="kicker" style="margin:36px 0 14px">Photos</h3>
     </div>
     <div class="gallery">
       <button type="button" data-src="photos/low-stance.jpg" data-alt="Hodaya in a low hip hop stance" aria-label="Enlarge photo: Hodaya in a low hip hop stance"><img loading="lazy" src="photos/low-stance.jpg" alt="Hodaya in a low hip hop stance"></button>
@@ -576,6 +597,37 @@
     done.scrollIntoView({behavior:'smooth', block:'start'});
   });
 
+  // Latest reels from Instagram
+  function renderReels(list) {
+    const box = document.getElementById('reels');
+    box.replaceChildren(...list.map(r => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'reel';
+      const label = (r.caption || 'Reel').split('\n')[0].slice(0, 80);
+      b.setAttribute('aria-label', 'Play reel: ' + label);
+      const img = document.createElement('img'); img.loading = 'lazy'; img.src = r.thumb; img.alt = '';
+      img.addEventListener('error', () => b.remove());
+      const play = document.createElement('span'); play.className = 'play'; play.setAttribute('aria-hidden', 'true');
+      play.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg>';
+      b.append(img, play);
+      b.addEventListener('click', () => {
+        const wrap = document.createElement('div'); wrap.className = 'reel-embed';
+        const frame = document.createElement('iframe');
+        frame.src = r.permalink.replace(/\/?(\?.*)?$/, '/') + 'embed/';
+        frame.title = 'Instagram reel: ' + label;
+        frame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+        frame.setAttribute('allowfullscreen', '');
+        const link = document.createElement('a'); link.href = r.permalink; link.target = '_blank'; link.rel = 'noopener'; link.textContent = 'Open on Instagram';
+        wrap.append(frame, link);
+        openViewer(wrap);
+      });
+      return b;
+    }));
+    document.getElementById('reels-block').hidden = list.length === 0;
+  }
+  fetch('/api/reels').then(r => r.ok ? r.json() : { reels: [] }).catch(() => ({ reels: [] }))
+    .then(j => renderReels(Array.isArray(j.reels) ? j.reels.filter(r => /^https:\/\/www\.instagram\.com\//.test(r.permalink || '')) : []));
+
   // Upcoming events from the CRM
   function renderEvents(list) {
     const box = document.getElementById('events-list');
@@ -645,6 +697,7 @@
   function closeViewer(){ if (viewer.close) viewer.close(); else viewer.removeAttribute('open'); }
   document.getElementById('viewer-close').addEventListener('click', closeViewer);
   viewer.addEventListener('click', e => { if (e.target === viewer) closeViewer(); });
+  viewer.addEventListener('close', () => vContent.replaceChildren());
   document.querySelectorAll('.gallery button').forEach(b => b.addEventListener('click', () => {
     const img = document.createElement('img');
     img.src = b.dataset.src; img.alt = b.dataset.alt;
