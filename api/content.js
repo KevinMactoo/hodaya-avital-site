@@ -3,6 +3,7 @@
 // "Anyone with the link: Viewer". Tabs (names matter, column order doesn't):
 //   Classes:  Name | Description | Day & time | Price | Show
 //   Events:   Title | Date | Time | Location | Price | Description | Show
+//   Shop:     Name | Price | Description | Image | Options | Tag | Show
 //   Settings: Setting | Value   (Studio location, Announcement)
 // Changes show on the site within about a minute (cached at Vercel's edge).
 const { send } = require('../lib/util');
@@ -66,12 +67,21 @@ function isoDate(v) {
   return Number.isNaN(t) ? '' : new Date(t + 12 * 3600e3).toISOString().slice(0, 10);
 }
 
+// Public https image links only. Google Drive share links become direct image links
+// (the file must be shared as "Anyone with the link").
+function imageUrl(v) {
+  const s = String(v || '').trim();
+  const drive = s.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([a-zA-Z0-9_-]{10,})/);
+  if (drive) return 'https://lh3.googleusercontent.com/d/' + drive[1];
+  return /^https:\/\/[^\s"'<>]+$/.test(s) ? s : '';
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'GET') return send(res, 405, { error: 'Use GET' });
   const id = sheetId();
   if (!id) return send(res, 200, { configured: false, classes: [], events: [], settings: {} });
 
-  const [classes, events, settings] = await Promise.all(['Classes', 'Events', 'Settings'].map(n =>
+  const [classes, events, settings, shop] = await Promise.all(['Classes', 'Events', 'Settings', 'Shop'].map(n =>
     tab(id, n).catch(e => { console.error(e.message); return null; })));
 
   const today = new Date(Date.now() + 2 * 3600e3).toISOString().slice(0, 10); // Israel is UTC+2/+3
@@ -84,6 +94,10 @@ module.exports = async (req, res) => {
       .filter(e => e.title && e.date && e.date >= today && shown(e.show))
       .sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')))
       .map((e, i) => ({ id: 'ev' + i + '-' + e.date, title: e.title, date: e.date, time: e.time || '', location: e.location || '', price: e.price || '', description: e.description || '' })),
+    shop: (shop || []).filter(p => p.name && shown(p.show)).slice(0, 48).map(p => ({
+      name: p.name, price: p.price || '', description: p.description || '', image: imageUrl(p.image), tag: p.tag || '',
+      options: String(p.options || '').split(',').map(o => o.trim()).filter(Boolean).slice(0, 20),
+    })),
     settings: {},
   };
   for (const s of settings || []) {
@@ -93,7 +107,7 @@ module.exports = async (req, res) => {
   out.settings = { location: out.settings.studiolocation || out.settings.location || '', announcement: out.settings.announcement || '' };
 
   // If every tab failed, say so but keep the site's built-in content.
-  if (!classes && !events && !settings) return send(res, 200, { configured: false, error: 'Could not read the sheet', classes: [], events: [], settings: {} });
+  if (!classes && !events && !settings && !shop) return send(res, 200, { configured: false, error: 'Could not read the sheet', classes: [], events: [], settings: {} });
 
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
