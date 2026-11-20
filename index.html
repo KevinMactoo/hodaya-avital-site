@@ -92,6 +92,7 @@
   .reel-embed{display:flex;flex-direction:column;gap:10px;align-items:center;background:#fff;border-radius:12px;padding:10px}
   .reel-embed iframe{border:0;width:100%;max-width:400px;height:min(80vh,720px);border-radius:8px;background:#fff}
   .reel-embed a{font-weight:800;font-size:14px;padding:6px 0}
+  .announce{background:var(--accent);color:#fff;text-align:center;font-weight:800;font-size:15px;padding:12px 20px}
   .posters{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .poster{padding:0;border:0;background:none;cursor:zoom-in;text-align:left;display:flex;flex-direction:column;gap:10px;font:inherit;color:inherit}
   .poster-frame{position:relative;width:100%;aspect-ratio:2/3;overflow:hidden;border-radius:10px;box-shadow:0 10px 30px rgba(30,11,51,.15);background:var(--ground)}
@@ -122,6 +123,7 @@
 </head>
 <body>
 
+<div class="announce" id="announcement" role="status" hidden></div>
 <div class="hero">
   <div class="wrap">
     <header class="top">
@@ -151,7 +153,7 @@
   <div class="wrap">
     <p class="kicker" style="color:var(--accent)">Classes</p>
     <h2 class="display" style="font-size:56px;margin-top:8px">Pick your vibe</h2>
-    <div class="classes">
+    <div class="classes" id="classes-list">
       <div class="card">
         <h3 class="display">Afro</h3>
         <p>Grooves, footwork and energy rooted in Afro dance styles.</p>
@@ -168,7 +170,7 @@
         <p class="meta">By appointment · [PRICE]</p>
       </div>
     </div>
-    <p class="note" style="margin-top:16px">Studio: [STUDIO / LOCATION]</p>
+    <p class="note" style="margin-top:16px" id="studio-location">Studio: [STUDIO / LOCATION]</p>
   </div>
 </section>
 
@@ -432,8 +434,7 @@
           <label for="phone">Phone</label>
           <input id="phone" name="phone" type="tel" autocomplete="tel" required>
         </div>
-        <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
-        <fieldset id="cls-field">
+                <fieldset id="cls-field">
           <legend>Class</legend>
           <div class="chips">
             <label class="chip"><input type="radio" name="cls" value="Afro" checked><span>Afro</span></label>
@@ -482,7 +483,7 @@
           <textarea id="msg" name="msg"></textarea>
         </div>
         <p class="error" id="err" role="alert" hidden></p>
-        <div class="field full"><button class="btn accent" type="submit" id="submit-btn">Send booking request</button></div>
+        <div class="field full"><button class="btn accent" type="submit" id="submit-btn">Prepare booking request</button></div>
       </form>
 
       <div class="done" id="done" aria-live="polite">
@@ -538,18 +539,7 @@
   }
   typeRadios.forEach(r => r.addEventListener('change', syncType));
 
-  async function postBooking(payload) {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 8000);
-    try {
-      const r = await fetch('/api/book', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl.signal });
-      const j = await r.json().catch(() => ({}));
-      return { ok: r.ok, error: j.error, status: r.status };
-    } catch (e) { return { ok: false }; }
-    finally { clearTimeout(t); }
-  }
-
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     const f = new FormData(form);
     const name = (f.get('name')||'').trim();
@@ -565,15 +555,6 @@
     }
     err.hidden = true;
     const msg = (f.get('msg')||'').trim();
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    const saved = await postBooking({
-      name, phone, type, cls: f.get('cls'), eventId: ev ? ev.id : '', date: isEvent ? '' : date,
-      time: f.get('time'), level: f.get('level'), people: f.get('people') || 1, note: msg, website: f.get('website') || ''
-    });
-    btn.disabled = false; btn.textContent = 'Send booking request';
-    if (saved.status === 400 && saved.error) { err.textContent = saved.error; err.hidden = false; return; }
-
     const lines = [
       'Hi Hodaya! I\'d like to book a session.',
       '',
@@ -587,10 +568,6 @@
     if (msg) lines.push('Note: ' + msg);
     summary.textContent = lines.join('\n');
     document.getElementById('wa').href = 'https://wa.me/972585653466?text=' + encodeURIComponent(summary.textContent);
-    document.getElementById('done-title').textContent = saved.ok ? 'Request received' : 'Almost there';
-    document.getElementById('done-note').textContent = saved.ok
-      ? 'Your booking request is in. Hodaya will confirm your spot. For a faster reply, send it on WhatsApp too.'
-      : 'Your request isn\'t sent yet. Tap the WhatsApp button, then press send in the chat.';
     copied.textContent = '';
     form.style.display = 'none';
     done.classList.add('show');
@@ -641,11 +618,8 @@
       const meta = document.createElement('p'); meta.className = 'meta'; meta.style.cssText = 'font-weight:800;color:var(--ink)';
       meta.textContent = [ev.time, ev.location, ev.price].filter(Boolean).join(' · ');
       if (meta.textContent) card.append(meta);
-      if (ev.spotsLeft !== null && ev.spotsLeft !== undefined) {
-        const s = document.createElement('p'); s.textContent = ev.spotsLeft > 0 ? ev.spotsLeft + ' spots left' : 'Fully booked'; card.append(s);
-      }
       const a = document.createElement('a'); a.className = 'btn accent'; a.href = '#book';
-      a.textContent = ev.spotsLeft === 0 ? 'Join waitlist' : 'Book a spot';
+      a.textContent = 'Book a spot';
       a.addEventListener('click', () => {
         form.style.display = ''; done.classList.remove('show');
         form.querySelector('input[name="type"][value="Event"]').checked = true;
@@ -658,8 +632,30 @@
     document.getElementById('event-chip').hidden = list.length === 0;
     eventSel.replaceChildren(...list.map(ev => { const o = document.createElement('option'); o.value = ev.id; o.textContent = ev.title + ' · ' + fmtDay(ev.date, {weekday:'short',day:'numeric',month:'short'}); return o; }));
   }
-  fetch('/api/events').then(r => r.ok ? r.json() : { events: [] }).catch(() => ({ events: [] }))
-    .then(j => { upcoming = Array.isArray(j.events) ? j.events : []; renderEvents(upcoming); });
+  // Classes, events and announcement from the Google Sheet (via /api/content)
+  function renderClasses(list) {
+    if (!list.length) return; // keep the built-in cards
+    document.getElementById('classes-list').replaceChildren(...list.map(c => {
+      const card = document.createElement('div'); card.className = 'card';
+      const h = document.createElement('h3'); h.className = 'display'; h.textContent = c.name;
+      card.append(h);
+      if (c.description) { const p = document.createElement('p'); p.textContent = c.description; card.append(p); }
+      const meta = [c.when, c.price].filter(Boolean).join(' · ');
+      if (meta) { const m = document.createElement('p'); m.className = 'meta'; m.textContent = meta; card.append(m); }
+      return card;
+    }));
+  }
+  fetch('/api/content').then(r => r.ok ? r.json() : {}).catch(() => ({})).then(j => {
+    const configured = j && j.configured;
+    upcoming = configured && Array.isArray(j.events) ? j.events : [];
+    renderEvents(upcoming);
+    if (!configured) return;
+    renderClasses(Array.isArray(j.classes) ? j.classes : []);
+    const st = j.settings || {};
+    if (st.location) document.getElementById('studio-location').textContent = 'Studio: ' + st.location;
+    const ann = document.getElementById('announcement');
+    if (st.announcement) { ann.textContent = st.announcement; ann.hidden = false; }
+  });
 
   document.getElementById('copy').addEventListener('click', async () => {
     try {

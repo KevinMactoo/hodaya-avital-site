@@ -1,13 +1,8 @@
 {
+  "crons": [
+    { "path": "/api/reels?refresh=1", "schedule": "17 4 * * 1" }
+  ],
   "headers": [
-    {
-      "source": "/admin/(.*)",
-      "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
-        { "key": "Cache-Control", "value": "no-store" },
-        { "key": "X-Frame-Options", "value": "DENY" }
-      ]
-    },
     {
       "source": "/(.*)",
       "headers": [
@@ -15,8 +10,5 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
-  ],
-  "redirects": [
-    { "source": "/admin", "destination": "/admin/", "permanent": false }
   ]
 }
